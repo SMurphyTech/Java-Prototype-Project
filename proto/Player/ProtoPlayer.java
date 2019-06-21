@@ -263,6 +263,8 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
         }
 
         if (key == KeyEvent.VK_J) {
+            System.out.println(x);
+            System.out.println(y);
             if (paused == false) {
                 paused = true;
             } else {

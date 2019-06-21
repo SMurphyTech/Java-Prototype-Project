@@ -12,7 +12,7 @@ public class ProtoTile extends ProtoTileLoadImage {
     public static Rectangle r;
     private ProtoPlayer player = ProtoPaint.getPlayer();
     private ProtoEnemySeeker seek = ProtoPaint.getSeek();
-    int count = 1;
+    boolean clear = true;
 
     public ProtoTile(int x, int y, int typeInt) {
         loadImage();
@@ -40,6 +40,9 @@ public class ProtoTile extends ProtoTileLoadImage {
                 tileImage = brick;
                 break;
             case 3:
+                //door sprite goes here
+                break;
+            case 4:
                 //door sprite goes here
                 break;
             default:
@@ -78,22 +81,34 @@ public class ProtoTile extends ProtoTileLoadImage {
                 }
             }
             if(type == 3){
-                if (count < 2) {
 
-                ProtoPaint.changeMaps();
+                    ProtoPaint.changeMaps("exit");
+                
+            }           
+            if(type == 4){
 
-                count += 1;
-            }
+                    ProtoPaint.changeMaps("entrance");
+                
             }
         }
 
         if (rbot.intersects(r)) {
             if (type == 1) {
                 if (player.isMovingU() == false) {
-                    player.setDy(0);
+                    player.setDy(0); 
                 } else if (player.getDy() > 0) {
                     player.setDy(0);
                 }
+            }
+            if(type == 3){
+                
+                    ProtoPaint.changeMaps("exit");
+
+            }
+            if(type == 4){
+
+                    ProtoPaint.changeMaps("entrance");
+                
             }
         }
 

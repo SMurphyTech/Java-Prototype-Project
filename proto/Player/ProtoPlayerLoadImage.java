@@ -16,16 +16,16 @@ public class ProtoPlayerLoadImage {
     public ArrayList<Image> hearts = new ArrayList<Image>();
     
     public void load(){
-        ImageIcon non = new ImageIcon("src/sprites/Nothing.png"); 
+        ImageIcon non = new ImageIcon("src\\sprites\\Nothing.png"); 
         nothing = non.getImage();
         
-        ImageIcon pd = new ImageIcon("src/sprites/player/Green Boi Down64.png");
+        ImageIcon pd = new ImageIcon("src\\sprites\\player\\Green Boi Down64.png");
         playerDown = pd.getImage();
-        ImageIcon pu = new ImageIcon("src/sprites/player/Green Boi Up64.png");
+        ImageIcon pu = new ImageIcon("src\\sprites\\player\\Green Boi Up64.png");
         playerUp = pu.getImage();
-        ImageIcon pr = new ImageIcon("src/sprites/player/Green Boi Right64.png");
+        ImageIcon pr = new ImageIcon("src\\sprites\\player\\Green Boi Right64.png");
         playerRight = pr.getImage();
-        ImageIcon pl = new ImageIcon("src/sprites/player/Green Boi Left64.png");
+        ImageIcon pl = new ImageIcon("src\\sprites\\player\\Green Boi Left64.png");
         playerLeft = pl.getImage();
         player = playerDown;
         
@@ -44,22 +44,22 @@ public class ProtoPlayerLoadImage {
         currentAnim = playerIdleD;
         
         //running sprites
-        ImageIcon pmd1 = new ImageIcon("src/sprites/player/Green Boi MoveD 1.png");
-        ImageIcon pmd2 = new ImageIcon("src/sprites/player/Green Boi MoveD 2.png");
+        ImageIcon pmd1 = new ImageIcon("src\\sprites\\player\\Green Boi MoveD 1.png");
+        ImageIcon pmd2 = new ImageIcon("src\\sprites\\player\\Green Boi MoveD 2.png");
         playerRunD = pmd1.getImage();
         playerRunD2 = pmd2.getImage();
-        ImageIcon pmu1 = new ImageIcon("src/sprites/player/Green Boi MoveU 1.png");
-        ImageIcon pmu2 = new ImageIcon("src/sprites/player/Green Boi MoveU 2.png");
-        ImageIcon pmu3 = new ImageIcon("src/sprites/player/Green Boi MoveU 3.png");
+        ImageIcon pmu1 = new ImageIcon("src\\sprites\\player\\Green Boi MoveU 1.png");
+        ImageIcon pmu2 = new ImageIcon("src\\sprites\\player\\Green Boi MoveU 2.png");
+        ImageIcon pmu3 = new ImageIcon("src\\sprites\\player\\Green Boi MoveU 3.png");
         playerRunU = pmu1.getImage();
         playerRunU2 = pmu2.getImage();
         playerRunU3 = pmu3.getImage();
-        ImageIcon pmr1 = new ImageIcon("src/sprites/player/Green Boi MoveR 1.png");
-        ImageIcon pmr2 = new ImageIcon("src/sprites/player/Green Boi MoveR 2.png");
+        ImageIcon pmr1 = new ImageIcon("src\\sprites\\player\\Green Boi MoveR 1.png");
+        ImageIcon pmr2 = new ImageIcon("src\\sprites\\player\\Green Boi MoveR 2.png");
         playerRunR = pmr1.getImage();
         playerRunR2 = pmr2.getImage();
-        ImageIcon pml1 = new ImageIcon("src/sprites/player/Green Boi MoveL 1.png");
-        ImageIcon pml2 = new ImageIcon("src/sprites/player/Green Boi MoveL 2.png");
+        ImageIcon pml1 = new ImageIcon("src\\sprites\\player\\Green Boi MoveL 1.png");
+        ImageIcon pml2 = new ImageIcon("src\\sprites\\player\\Green Boi MoveL 2.png");
         playerRunL = pml1.getImage();
         playerRunL2 = pml2.getImage();
         
@@ -86,13 +86,13 @@ public class ProtoPlayerLoadImage {
         playerMoveL.addFrame(playerLeft, 100);
         
         //attack sprites
-        ImageIcon psr = new ImageIcon("src/sprites/player/Green Boi Right Swipe.png");
+        ImageIcon psr = new ImageIcon("src\\sprites\\player\\Green Boi Right Swipe.png");
         playerSwipeR = psr.getImage();
-        ImageIcon psl = new ImageIcon("src/sprites/player/Green Boi Left Swipe.png");
+        ImageIcon psl = new ImageIcon("src\\sprites\\player\\Green Boi Left Swipe.png");
         playerSwipeL = psl.getImage();
-        ImageIcon psu = new ImageIcon("src/sprites/player/Green Boi Up Swipe.png");
+        ImageIcon psu = new ImageIcon("src\\sprites\\player\\Green Boi Up Swipe.png");
         playerSwipeU = psu.getImage();
-        ImageIcon psd = new ImageIcon("src/sprites/player/Green Boi Down Swipe.png");
+        ImageIcon psd = new ImageIcon("src\\sprites\\player\\Green Boi Down Swipe.png");
         playerSwipeD = psd.getImage();
         
         playerSwipeAnimR = new ProtoAnimation();
@@ -108,9 +108,9 @@ public class ProtoPlayerLoadImage {
         playerSwipeAnimD.addFrame(playerSwipeD, 100);
         
         //hurt sprites
-        ImageIcon ph = new ImageIcon("src/sprites/player/Green Boi Hurt.png");
-        ImageIcon ph2 = new ImageIcon("src/sprites/player/Green Boi Hurt2.png");
-        ImageIcon phs = new ImageIcon("src/sprites/player/Green Boi Hurt sparks.png");
+        ImageIcon ph = new ImageIcon("src\\sprites\\player\\Green Boi Hurt.png");
+        ImageIcon ph2 = new ImageIcon("src\\sprites\\player\\Green Boi Hurt2.png");
+        ImageIcon phs = new ImageIcon("src\\sprites\\player\\Green Boi Hurt sparks.png");
         playerHurt = ph.getImage();
         playerHurt2 = ph2.getImage();
         playerHurtSparks = phs.getImage();
@@ -136,9 +136,9 @@ public class ProtoPlayerLoadImage {
         invinciFramesD.addFrame(nothing, 100);
         
         //Health image setups
-        ImageIcon fhi = new ImageIcon("src/sprites/player/Full Heart 66.png");
+        ImageIcon fhi = new ImageIcon("src\\sprites\\player\\Full Heart 66.png");
         fullHeart = fhi.getImage();
-        ImageIcon ehi = new ImageIcon("src/sprites/player/Empty Heart 66.png");
+        ImageIcon ehi = new ImageIcon("src\\sprites\\player\\Empty Heart 66.png");
         emptyHeart = ehi.getImage();
         
         hearts.add(fullHeart);

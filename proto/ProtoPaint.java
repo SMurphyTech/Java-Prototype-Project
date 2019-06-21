@@ -19,7 +19,8 @@ public class ProtoPaint extends JPanel implements ActionListener, Runnable {
     static ProtoPlayer player;
     static ProtoEnemySeeker seek;
     static ProtoMap map;
-    public static String currentMap = "src/maps/TestMap2.txt";
+    public static String previousMap;
+    public static String currentMap = "src\\maps\\TestMap.txt";
 
     public ProtoPaint() {
         loadFrame();
@@ -33,6 +34,7 @@ public class ProtoPaint extends JPanel implements ActionListener, Runnable {
 
         player = new ProtoPlayer();
         seek = new ProtoEnemySeeker(100, 100);
+        map = new ProtoMap();
 
         try {
             map.loadMap(currentMap);
@@ -75,6 +77,7 @@ public class ProtoPaint extends JPanel implements ActionListener, Runnable {
         g2d.setColor(Color.WHITE);
         g2d.drawRect(seek.getaHitBox().x, seek.getaHitBox().y, seek.getaHitBox().width, seek.getaHitBox().height);
 
+        /*
         g2d.drawRect(player.getRect().x, player.getRect().y, player.getRect().width, player.getRect().height);
         g2d.drawRect(player.getRect2().x, player.getRect2().y, player.getRect2().width, player.getRect2().height);
         g2d.drawRect(player.getFootright().x, player.getFootright().y, player.getFootright().width, player.getFootright().height);
@@ -82,7 +85,7 @@ public class ProtoPaint extends JPanel implements ActionListener, Runnable {
         g2d.drawRect(player.getYellowRed().x, player.getYellowRed().y, player.getYellowRed().width, player.getYellowRed().height);
 
         g2d.drawRect(ProtoAttack.getSliceBox().x, ProtoAttack.getSliceBox().y, ProtoAttack.getSliceBox().width, ProtoAttack.getSliceBox().height);
-
+        */
         switch (player.getHealth()) {
             case 4:
                 g2d.drawImage(player.getFullHeart(), 7 * 2, 5 * 2, this);
@@ -187,14 +190,28 @@ public class ProtoPaint extends JPanel implements ActionListener, Runnable {
         }
     }
 
-    public static void changeMaps() {
+    public static void changeMaps(String whichway) {
+        previousMap = currentMap;
+        System.out.println(previousMap);
+        
         map.getTilearray().clear();
  
-        currentMap = "src/maps/TestMap.txt";
+        if(whichway == "exit"){
+            ProtoMap.mapCount += 1;
+            player.setX(map.enterCoordsX.get(map.mapCount));
+            player.setY(map.enterCoordsY.get(map.mapCount));
+            currentMap = ProtoMap.maps.get(ProtoMap.mapCount);
+            System.out.println(ProtoMap.mapCount);
+        }else if(whichway == "entrance"){
+            ProtoMap.mapCount -= 1;
+            player.setX(map.exitCoordsX.get(map.mapCount));
+            player.setY(map.exitCoordsY.get(map.mapCount));
+            currentMap = ProtoMap.maps.get(ProtoMap.mapCount);
+            System.out.println(ProtoMap.mapCount);
+        }
         
         try {
             map.loadMap(currentMap);
-            System.out.println("works");
         } catch (IOException ex) {
             Logger.getLogger(ProtoPaint.class.getName()).log(Level.SEVERE, null, ex);
         }
