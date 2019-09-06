@@ -62,7 +62,6 @@ public class ProtoAttack extends ProtoPlayer {
         sliceBox.setBounds(0, 0, 0, 0);
         mobile = true;
         attacking = false;
-        System.out.println("cancelled");
     }
 
     public static Rectangle getSliceBox() {

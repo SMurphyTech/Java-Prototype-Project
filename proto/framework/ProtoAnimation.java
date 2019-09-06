@@ -1,4 +1,4 @@
-package proto.framework;
+ package proto.framework;
 
 import java.awt.Image;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ public class ProtoAnimation {
     private int currentFrame;
     private long animTime;
     private long totalDuration;
+    int b = 0;
 
     public ProtoAnimation() {
         frames = new ArrayList();
@@ -25,10 +26,16 @@ public class ProtoAnimation {
     }
 
     public synchronized void update(long elapsedTime) {
+        
         if (frames.size() > 1) {
             animTime += elapsedTime;
+            
             if (animTime >= totalDuration) {
-                animTime = animTime % totalDuration;
+                  if(elapsedTime == 5){
+//                System.out.println("animTime = " + animTime);
+//                System.out.println("totalDuration = " + totalDuration);
+                }
+                animTime = animTime % totalDuration;              
                 currentFrame = 0;
 
             }

@@ -1,98 +1,93 @@
-
 package proto.tile;
 
 import java.util.ArrayList;
 
 public class ProtoMapList {
-    public String map1, map2, map3, map4;
-    public int enter1X, enter2X, enter3X, enter4X;
-    public int enter1Y, enter2Y, enter3Y, enter4Y;
-    public int exit1X, exit2X, exit3X, exit4X;
-    public int exit1Y, exit2Y, exit3Y, exit4Y;
-    public static ArrayList<String> maps = new ArrayList<String>();
-    
-    public static ArrayList<Integer> enterCoordsX = new ArrayList<Integer>();
-    public static ArrayList<Integer> enterCoordsY = new ArrayList<Integer>();
-    
-    public static ArrayList<Integer> exitCoordsX = new ArrayList<Integer>();
-    public static ArrayList<Integer> exitCoordsY = new ArrayList<Integer>();
-    public static int mapCount = 0;
-    
+
+    public String empty;
+    //public String ;
+    //public String ;
+    public String mapX3Y3, mapX4Y3;
+    public String mapX1Y4, mapX2Y4, mapX3Y4, mapX4Y4, mapX5Y4;
+    public String mapX4Y5;
+    public String mapX4Y6;
+
+    public static ArrayList<ArrayList> mapX = new ArrayList<ArrayList>();
+
+    public static ArrayList<String> X1 = new ArrayList<String>();
+    public static ArrayList<String> X2 = new ArrayList<String>();
+    public static ArrayList<String> X3 = new ArrayList<String>();
+    public static ArrayList<String> X4 = new ArrayList<String>();
+    public static ArrayList<String> X5 = new ArrayList<String>();
+    public static ArrayList<String> X6 = new ArrayList<String>();
+    public static ArrayList<String> X7 = new ArrayList<String>();
+
+    public static int currentMapX = 0, currentMapY = 0;
+
+    public static int northEntranceY, northEntranceX,
+            southEntranceY, southEntranceX,
+            eastEntranceY, eastEntranceX,
+            westEntranceY, westEntranceX;
+
     public void load() {
-        map1 = "src\\maps\\TestMap.txt";
-        map2 = "src\\maps\\TestMap3.txt";
-        map3 = "src\\maps\\TestMap2.txt";
-        map4 = "src\\maps\\TestMap4.txt";
-        
-        maps.add(map1);
-        maps.add(map2);
-        maps.add(map3);
-        maps.add(map4);
-        
-        //coords for entering a new room
-        enter1X = 1350;
-        enter1Y = 650;
-        enter2X = 800;
-        enter2Y = 180;
-        enter3X = 800;
-        enter3Y = 180;
-        enter4X = 760;
-        enter4Y = 750;
-        
-        enterCoordsX.add(enter1X);
-        enterCoordsY.add(enter1Y);
-        
-        enterCoordsX.add(enter2X);
-        enterCoordsY.add(enter2Y);     
-        
-        enterCoordsX.add(enter3X);
-        enterCoordsY.add(enter3Y); 
-        
-        enterCoordsX.add(enter4X);
-        enterCoordsY.add(enter4Y); 
-        
-        //coords for exiting to a previous room
-        exit1X = 1350;
-        exit1Y = 650;
-        exit2X = 800;
-        exit2Y = 770;
-        exit3X = 1300;
-        exit3Y = 770;
-        exit4X = 1310;
-        exit4Y = 310;
-        
-        exitCoordsX.add(exit1X);
-        exitCoordsY.add(exit1Y);
-        
-        exitCoordsX.add(exit2X);
-        exitCoordsY.add(exit2Y);
-        
-        exitCoordsX.add(exit3X);
-        exitCoordsY.add(exit3Y);
-        
-        exitCoordsX.add(exit4X);
-        exitCoordsY.add(exit4Y);
-    }   
+        //starting map coordinates ( - 1 cause Arraylists start at 0)
+        currentMapX = 1 - 1;
+        currentMapY = 4 - 1;
 
-    public static ArrayList<Integer> getEnterCoordsX() {
-        return enterCoordsX;
+        mapX.add(X1);
+        mapX.add(X2);
+        mapX.add(X3);
+        mapX.add(X4);
+        mapX.add(X5);
+        mapX.add(X6);
+        mapX.add(X7);
+
+        mapX1Y4 = "src\\maps\\TestMap_1_4.txt";
+
+        mapX2Y4 = "src\\maps\\TestMap_2_4.txt";
+
+        mapX3Y3 = "src\\maps\\TestMap_3_3.txt";
+        mapX3Y4 = "src\\maps\\TestMap_3_4.txt";
+
+        mapX4Y3 = "src\\maps\\TestMap_4_3.txt";
+        mapX4Y4 = "src\\maps\\TestMap_4_4.txt";
+        mapX4Y5 = "src\\maps\\TestMap_4_5.txt";
+        mapX4Y6 = "src\\maps\\TestMap_4_6.txt";
+
+        mapX5Y4 = "src\\maps\\TestMap_5_4.txt";
+
+        addMap(X1, 4, 6, mapX1Y4);
+
+        addMap(X2, 4, 6, mapX2Y4);
+
+        addMap(X3, 3, 6, mapX3Y3);
+        addMap(X3, 4, 6, mapX3Y4);
+
+        addMap(X4, 3, 6, mapX4Y3);
+        addMap(X4, 4, 6, mapX4Y4);
+        addMap(X4, 5, 6, mapX4Y5);
+        addMap(X4, 6, 6, mapX4Y6);
+
+        addMap(X5, 4, 6, mapX5Y4);
     }
 
-    public static ArrayList<Integer> getEnterCoordsY() {
-        return enterCoordsY;
-    }
-    
-    public static ArrayList<Integer> getExitCoordsX() {
-        return exitCoordsX;
+    public void addMap(ArrayList x, int y, int y_capacity, String name) {
+        for (int map_y = 0; map_y < y_capacity; map_y++) {
+
+            // place holder variable is so the set() command has switch to
+            if (x.size() < y_capacity) {
+                String placeholder = null;
+                x.add(placeholder);
+            }
+
+            if (map_y == y - 1) {
+                x.set(map_y, name);
+            } else {
+                if (x.get(map_y) == null) {
+                    x.set(map_y, empty);
+                }
+            }
+        }
     }
 
-    public static ArrayList<Integer> getExitCoordsY() {
-        return exitCoordsY;
-    }
-    
-    public static ArrayList<String> getMaps() {
-        return maps;
-    }
-    
-            
 }

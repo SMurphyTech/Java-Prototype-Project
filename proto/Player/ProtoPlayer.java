@@ -3,16 +3,21 @@ package proto.Player;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import proto.ProtoPaint;
+import proto.Items.ProtoItem;
 import proto.framework.ProtoAnimation;
+import proto.message.ProtoMessage;
+import proto.tile.ProtoMap;
 
 public class ProtoPlayer extends ProtoPlayerLoadImage {
 
     public static int dy, dx, x = 400, y = 200;
     //determines where the sprites are displayed in relation to the x coordinate: (x - spacerX)
     public static int spacerX = 32, spacerY = 36;
-    private final int move = 5;
+    private final int move = 7;
     public static int health = 4, animSpeed = 7;
     public static boolean movingR, movingL, movingU, movingD;
 
@@ -20,18 +25,25 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
         DOWN, UP, RIGHT, LEFT;
     }
     static Dir dir = Dir.DOWN;
-    public static boolean paused = false;
+    public static boolean paused = false, canCancel = false;
     public static boolean invincible = false, hit = false;
-    public static boolean mobile = true, attacking = false, swiped = false;
+    public static boolean mobile = true, attacking = false, swiped = false, sliding = false, interacting = false, leaving = false, dead = false;
     public static Rectangle yellowRed = new Rectangle(0, 0, 0, 0);
     public static Rectangle rect = new Rectangle(0, 0, 0, 0);
     public static Rectangle rect2 = new Rectangle(0, 0, 0, 0);
     public static Rectangle footleft = new Rectangle(0, 0, 0, 0);
     public static Rectangle footright = new Rectangle(0, 0, 0, 0);
+    public static ArrayList<Rectangle> hitboxes = new ArrayList<Rectangle>();
     private Timer invincibility, damage;
+    public static ArrayList<ProtoItem> inventory = new ArrayList<ProtoItem>();
+    private ProtoMessage msg = ProtoPaint.getMsg();
 
     public ProtoPlayer() {
         loadImage();
+        hitboxes.add(rect);
+        hitboxes.add(rect2);
+        hitboxes.add(footleft);
+        hitboxes.add(footright);
     }
 
     private void loadImage() {
@@ -41,15 +53,14 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
     public void update() {
         x = dx + x;
         y = dy + y;
-        
 
         currentAnim.update(animSpeed);
         player = currentAnim.getImage();
 
-        //System.out.println(dir);
-        
+        // so that the player can't jump 2 rooms at a time by touching 2 door tiles at once
+        leaving = false;
+        //System.out.println(ProtoMessage.letterImgs);
         //failsafe for movement (keypresses alone produce weird stutter-stops)
-        
         if (mobile == true) {
             if (movingU == true && movingD == false) {
                 dy = -move;
@@ -69,12 +80,25 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
                 dir = Dir.LEFT;
             }
         }
-        
+
         //failsafe for hitstun while attacking (you can move during the hitstun
         //animation if you attack on the same frame as getting hit)
-        if(hit == true){
+        if (hit == true) {
             dx = 0;
-            dy = 0;  
+            dy = 0;
+        } else if (sliding == true) {
+            if (dy > 0) {
+                dy -= 1;
+            }
+            if (dx > 0) {
+                dx -= 1;
+            }
+            if (dy < 0) {
+                dy += 1;
+            }
+            if (dx < 0) {
+                dx += 1;
+            }
         }
 
         updateHitBoxes();
@@ -178,7 +202,7 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
             hit = true;
             animSpeed = 10;
             stop();
-            System.out.println(health);
+//            System.out.println(health);
             damage = new Timer();
             damage.schedule(new damageOver(), 600);
         }
@@ -188,13 +212,18 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
 
         @Override
         public void run() {
-            System.out.println("damage anim over");
+//            System.out.println("damage anim over");
             hit = false;
             mobile = true;
             invincible = true;
             damage.cancel();
+            if(health > 0){
             invincibility = new Timer();
             invincibility.schedule(new InvinceOver(), 2000);
+            }else{
+                paused = true;
+                dead = true;
+            }
         }
     }
 
@@ -205,7 +234,7 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
         public void run() {
             invincible = false;
             animSpeed = 7;
-            System.out.println("invincibility over");
+//            System.out.println("invincibility over");
             invincibility.cancel(); //Terminate the timer thread
         }
     }
@@ -219,15 +248,15 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if(attacking == true){
+        if (attacking == true) {
             ProtoAttack.cancel();
         }
-        
+
         if (mobile == true) {
             if (key == KeyEvent.VK_W) {
-                dy = -6;
+                dy = -move;
                 movingU = true;
-                //displays upwards running animation, the player is not running
+                //displays upwards running animation if the player is not running
                 //up or down
                 if (movingR == false && movingL == false) {
                     dir = Dir.UP;
@@ -235,7 +264,7 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
             }
 
             if (key == KeyEvent.VK_S) {
-                dy = 6;
+                dy = move;
                 movingD = true;
                 if (movingR == false && movingL == false) {
                     dir = Dir.DOWN;
@@ -243,17 +272,17 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
             }
 
             if (key == KeyEvent.VK_D) {
-                dx = 6;
+                dx = move;
                 movingR = true;
                 dir = Dir.RIGHT;
             }
 
             if (key == KeyEvent.VK_A) {
-                dx = -6;
+                dx = -move;
                 movingL = true;
                 dir = Dir.LEFT;
             }
-        }  
+        }
 
         if (key == KeyEvent.VK_K) {
             if (swiped == false) {
@@ -265,11 +294,23 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
         if (key == KeyEvent.VK_J) {
             System.out.println(x);
             System.out.println(y);
+            System.out.println(inventory);
+            System.out.println(ProtoMap.currentMapX);
+            System.out.println(ProtoMap.currentMapY);
+            System.out.println(ProtoMap.X3);
             if (paused == false) {
                 paused = true;
+            } else if(dead == true){
+                
             } else {
                 paused = false;
             }
+
+        }
+
+        if (key == KeyEvent.VK_L) {
+            interacting = true;
+            
         }
     }
 
@@ -278,6 +319,7 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
 
         if (key == KeyEvent.VK_W) {
             dy = 0;
+            //sliding = true;
             movingU = false;
             //makes sure the idle animation doesn't flicker for a sec
             //after letting go of W
@@ -288,6 +330,7 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
 
         if (key == KeyEvent.VK_S) {
             dy = 0;
+            //sliding = true;
             movingD = false;
             if (movingR == false && movingL == false) {
                 dir = Dir.DOWN;
@@ -296,18 +339,33 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
 
         if (key == KeyEvent.VK_D) {
             dx = 0;
+            //sliding = true;
             movingR = false;
             dir = Dir.RIGHT;
         }
 
         if (key == KeyEvent.VK_A) {
             dx = 0;
+            //sliding = true;
             movingL = false;
             dir = Dir.LEFT;
         }
 
         if (key == KeyEvent.VK_K) {
             swiped = false;
+        }
+
+        if (key == KeyEvent.VK_L) {
+            interacting = false;
+            
+            if (canCancel == false) {
+                canCancel = true;
+            } else if (canCancel == true) {
+                msg.removeText();
+                canCancel = false;
+                interacting = false;
+            }
+
         }
 
     }
@@ -415,6 +473,5 @@ public class ProtoPlayer extends ProtoPlayerLoadImage {
     public static ProtoAnimation getPlayerSwipeAnimL() {
         return playerSwipeAnimL;
     }
-    
-    
+
 }
